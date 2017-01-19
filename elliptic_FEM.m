@@ -10,8 +10,17 @@ L = b - a;                              % length of interval
 
 % 
 % define data, i.e. function and rhs
-% 
-%
+
+% copied from reference
+syms z;
+u_ex(z) = -sin(2*pi/L*z)*exp(z);        % exact solution
+Du_ex(z) = diff(u_ex(z), 1);            % differential
+rho(z) = -diff(u_ex(z), 2) + u_ex(z)    % rhs
+
+
+% set solver properties
+method = 'Lag1'
+rhs = 'exact'
 
 %% define the grid
 
@@ -72,8 +81,6 @@ switch grid_calculation
     error(['Error!\nGrid calculation only numerical (num) or ' ...
           'analytical (ana).\nYou entered %s'], grid_calculation);
 end
-
-method = 'Lag1'
 
 switch method
   case 'Lag1'
