@@ -20,7 +20,7 @@ rho(z) = -diff(u_ex(z), 2) + u_ex(z)    % rhs
 
 % set solver properties
 method = 'Lag1'
-rhs = 'exact'
+rhs_calculation = 'exact'
 
 %% define the grid
 

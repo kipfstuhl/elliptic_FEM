@@ -105,3 +105,48 @@ A = sparse(ivec, jvec, Mvec+Svec);
 figure
 spy(A)
 title('A')
+
+%% Definition of right-hand side vector
+
+switch rhs_calculation
+  case 'exact'
+    % calculate the integral for both basis fcts and add the
+    % solutions to receive the vector entry for this element.
+    rhovec = zeros(1, N);
+    syms xi
+    for i=1:N
+        clear z
+        % first basis function, this is xi
+        % evaluated at the left side of the node
+        z = x(i) + xi*C(i);             % transformation for left side
+        igrand1(xi) = eval(rho)*xi;     % rho == f, in notes
+        han1 = matlabFunction(igrand1(xi));
+        int1 = C(i)*integral(han1, 0, 1);
+
+        % second basis function, this is 1-xi
+        % evaluated at the right side of the node
+        z = x(i+1) + xi*C(i+1);         % transformation for right side
+        igrand2(xi) = eval(rho)*(1-xi);
+        han2 = matlabFunction(igrand2(xi));
+        int2 = C(i+1)*integral(han2, 0, 1);
+
+        % sum into discretisation of rho
+        rhovec(i) = int1 + int2;
+
+    end
+        
+  case 'basis'
+    z = nodes;
+    Mass = sparse(ivec, jvec, Mvec);
+    rhovec = (Mass * eval(rho)')';
+  otherwise
+    error(['rhs_calculation has to be ''exact'' or ''basis'', you ' ...
+           'used %s'], rhs_calculation);
+end
+
+%% solve the resulting system
+
+u = A \ rhovec';
+u = [0 u' 0];                           % get the boundary
+                                        % conditions right
+                                        % a feature of Lagrange basis
