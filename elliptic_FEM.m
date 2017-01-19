@@ -66,9 +66,25 @@ switch grid_calculation
     % visualisation of the grid
     clear y;
     y = linspace(a,b,100);
-    plot(x,zeros(size(x)),'bx',y,eval(H));
+    plot(x,zeros(size(x)),'bx',y,eval(H),'go');
     xlim([a b]);
   otherwise
     error(['Error!\nGrid calculation only numerical (num) or ' ...
           'analytical (ana).\nYou entered %s'], grid_calculation);
+end
+
+method = 'Lag1'
+
+switch method
+  case 'Lag1'
+    Lagrange1
+  case 'Lag2'
+    Lagrange2
+  case 'spl1'
+    Spline1
+  case 'spl2'
+    Spline2
+  otherwise
+    error(['Error!\nMethod %s not supported. Use Lag1, Lag2, spl1, ' ...
+           'or spl2 instead'], method);
 end
