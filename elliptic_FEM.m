@@ -21,6 +21,7 @@ rho(z) = -diff(u_ex(z), 2) + u_ex(z)    % rhs
 % set solver properties
 method = 'Lag1'
 rhs_calculation = 'exact'
+rhs_calculation = 'basis'
 
 %% define the grid
 
@@ -28,7 +29,7 @@ rhs_calculation = 'exact'
 grid_calculation = 'num'
 % grid_calculation = 'ana'
 
-x = calculate_grid(a, b, '0.1', 'num');
+[x, M] = calculate_grid(a, b, M, '0.1', 'num');
 figure
 plot(x, zeros(size(x)), 'bx');
 xlim([a b])

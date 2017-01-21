@@ -1,7 +1,8 @@
 
-function [x] = calculate_grid (a, b, H, method)
+function [x, M] = calculate_grid (a, b, M, H, method)
 % calculates a grid for one dimension
 % a, b are the endpoints
+% M is the desired number of elements
 % H is the spacing function
 % method is 'num' for numeric or 'ana' for analytical calculation
 
