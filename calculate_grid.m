@@ -10,7 +10,9 @@ function [x, M] = calculate_grid (a, b, M, H, method)
 switch method
   case 'ana'
     syms z
-    H(z) = sin(2*pi*z) + 1.2;           % spacing function
+    if ~exist('H')
+        H(z) = sin(2*pi*z) + 1.2;           % spacing function
+    end
     c = M/int(1/H, a, b);               % normalisaton constant
     g(z) = c * int(1/H);
     g(z) = g(z) - g(a);                 % set integration constant
@@ -23,7 +25,9 @@ switch method
     x(M+1) = b;
 
   case 'num'
-    H = '0.1'
+    if ~exist('H')
+        H = '0.1'
+    end
     count = 0;                          % number of vertices
     yvec = a;                           % first vertex
     y = a;
