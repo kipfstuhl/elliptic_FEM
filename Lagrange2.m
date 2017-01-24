@@ -104,8 +104,8 @@ nnz = nnz+1;
 
 ivec(nnz) = i;
 jvec(nnz) = i;
-Mvec(nnz) = C(i-1)*M12 + C(i+1)*M00;
-Svec(nnz) = Cinv(i-1)*S12 + Cinv(i+1)*S00;
+Mvec(nnz) = C(i-1)*M22 + C(i+1)*M00;
+Svec(nnz) = Cinv(i-1)*S22 + Cinv(i+1)*S00;
 nnz = nnz+1;
 
 ivec(nnz) = i;
