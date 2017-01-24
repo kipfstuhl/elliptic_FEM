@@ -29,7 +29,7 @@ rhs_calculation = 'exact'
 grid_calculation = 'num'
 % grid_calculation = 'ana'
 
-[x, M] = calculate_grid(a, b, M, '0.01', 'num');
+[x, M] = calculate_grid(a, b, M, '0.1', 'num');
 figure
 plot(x, zeros(size(x)), 'bx');
 xlim([a b])
