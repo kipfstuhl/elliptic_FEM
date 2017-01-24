@@ -65,11 +65,15 @@ C(1:2:end)= x(2:end) - x(1:end-1);
 % spend some memory to gain speed; this can't be optimized by the
 % JIT Compiler
 Cinv = zeros(1,N);                      % inverse of C
-Cinv(1:2:end) = 1./C(C~=0);             % don't compute this often
+Cinv(1:2:end) = 1./C(1:2:end);          % avoid division by 0
 
 % nodes
+% first and last node is not needed. The value of the function at
+% this points is known due to boundary conditions.
+% This results in a node vector that has two entries less than expected
 nodes = zeros(1,N);                      % even: vertex; odd: midpoint
-
+nodes(1:2:end) = (x(2:end) + x(1:end-1))/2;
+nodes(2:2:end-1) = x(2:end-1);
 
 %% assembly of system matrix
 
@@ -219,3 +223,58 @@ A = sparse(ivec, jvec, Mvec+Svec);
 figure
 spy(A)
 title('System matrix for Lagrange2')
+
+
+rhovec = zeros(1,N);                    % allocate memory
+switch rhs_calculation
+  case 'exact'
+    syms xi;
+
+    % handle evens and odds dirrferent
+
+    % i odd
+    for i=1:2:N
+        clear z igrand handle int
+        % (i+1)/2 is the corresponding index (i) in vector x
+        z = x((i+1)/2) + xi*C(i);     % variable transform R_{i-1}
+        igrand(xi) = eval(rho)*poly2sym(phi1, xi); % symbolic representation
+        handle = matlabFunction(igrand(xi)); % create function handle
+        int = C(i)*integral(handle, 0, 1); % integrate transformed
+                                        % function
+        rhovec(i) = int;
+    end
+
+    % i even
+    for i=2:2:N-1
+        clear z igrand handle int
+        % (i)/2 is the corresponding index (i-1) in vector x
+        ind = (i)/2;
+        z = x(ind) + xi*C(i-1);       % variable transform R_{i-2}
+        igrand(xi) = eval(rho)*poly2sym(phi2, xi);
+        handle = matlabFunction(igrand(xi)); % handle for integration
+        int = C(i-1)*integral(handle, 0, 1);
+
+        rhovec(i) = int;
+
+        clear z igrand handle int
+        % (i+2)/2 is the corresponding index (i+1) in vector x
+        ind = (i+2)/2;
+        z = x(ind) + xi*C(i+1);       % variable transform R_{i-2}
+        igrand(xi) = eval(rho)*poly2sym(phi0, xi);
+        handle = matlabFunction(igrand(xi)); % handle for integration
+        int = C(i+1)*integral(handle, 0, 1);
+
+        rhovec(i) = rhovec(i) + int;
+    end
+        
+  case 'basis'
+    z = nodes;
+    Mass = sparse(ivec, jvec, Mvec);
+    rhovec = (Mass * eval(rho)')';
+end
+
+
+%% solve the system
+
+u = A\rhovec';
+u = [0 u' 0];                           % boundary conds
