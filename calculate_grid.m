@@ -42,9 +42,8 @@ switch method
         del = c*eval(H);
         x(i+1) = x(i) + del;
     end
-
-    % visualisation of the grid
     clear y;
+    clear yvec;
   otherwise
     error(['Error!\nGrid calculation only numerical (num) or ' ...
           'analytical (ana).\nYou entered %s'], grid_calculation);
