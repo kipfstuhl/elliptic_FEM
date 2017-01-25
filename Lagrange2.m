@@ -8,7 +8,7 @@ phi2 = conv([2 -1], [ 1  0]);
 
 % differential
 Dphi0 = polyder(phi0);
-nDphi1 = polyder(phi1);
+Dphi1 = polyder(phi1);
 Dphi2 = polyder(phi2);
 
 

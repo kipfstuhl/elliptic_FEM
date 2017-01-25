@@ -1,5 +1,5 @@
 
-function [x, M] = calculate_grid (a, b, M, H, method)
+function [x, M] = calculate_grid (a, b, M, method, H)
 % calculates a grid for one dimension
 % a, b are the endpoints
 % M is the desired number of elements
@@ -50,6 +50,6 @@ switch method
     clear yvec;
   otherwise
     error(['Error!\nGrid calculation only numerical (num) or ' ...
-          'analytical (ana).\nYou entered %s'], grid_calculation);
+          'analytical (ana).\nYou entered %s'], method);
 end
 

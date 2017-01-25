@@ -18,7 +18,7 @@ ptemp = polyint(conv(phi0, phi0));
 M00 = polyval(ptemp, 1) - polyval(ptemp, 0);
 
 ptemp = polyint(conv(phi1, phi0));
-M10 = polyval(ptemp, 1) - polyval(ptemp, 0);
+M01 = polyval(ptemp, 1) - polyval(ptemp, 0);
 
 ptemp = polyint(conv(phi1, phi1));
 M11 = polyval(ptemp, 1) - polyval(ptemp, 0);
@@ -28,7 +28,7 @@ ptemp = polyint(conv(Dphi0, Dphi0));
 S00 = polyval(ptemp, 1) - polyval(ptemp, 0);
 
 ptemp = polyint(conv(Dphi1, Dphi0));
-S10 = polyval(ptemp, 1) - polyval(ptemp, 0);
+S01 = polyval(ptemp, 1) - polyval(ptemp, 0);
 
 ptemp = polyint(conv(Dphi1, Dphi1));
 S11 = polyval(ptemp, 1) - polyval(ptemp, 0);
@@ -122,13 +122,13 @@ switch rhs_calculation
         % first part of the spline
         z = x(i) + xi*C(i);             % transform
         igrand = eval(rho)*xi;
-        handle = matlabFunction(igrand(xi));
+        handle = matlabFunction(igrand);
         int_left = C(i)*integral(handle, 0, 1);
 
         % second part of the spline
         z = x(i+1) + xi*C(i+1);
         igrand = eval(rho)*(1-xi);
-        handle = matlabFunction(igrand(xi));
+        handle = matlabFunction(igrand);
         int_right = C(i)*integral(handle, 0, 1);
 
         rhovec(i) = int_left + int_right;
