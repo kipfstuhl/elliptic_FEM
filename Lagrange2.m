@@ -8,7 +8,7 @@ phi2 = conv([2 -1], [ 1  0]);
 
 % differential
 Dphi0 = polyder(phi0);
-Dphi1 = polyder(phi1);
+nDphi1 = polyder(phi1);
 Dphi2 = polyder(phi2);
 
 
@@ -271,6 +271,8 @@ switch rhs_calculation
     z = nodes;
     Mass = sparse(ivec, jvec, Mvec);
     rhovec = (Mass * eval(rho)')';
+  otherwise
+    error('rhs_calculation must be ''exact'' or ''basis''');
 end
 
 
