@@ -19,8 +19,8 @@ rho(z) = -diff(u_ex(z), 2) + u_ex(z)    % rhs
 
 
 % set solver properties
-method = 'spl1'
-rhs_calculation = 'exact'
+method = 'Lag2'
+rhs_calculation = 'basis'
 % rhs_calculation = 'basis'
 
 %% define the grid
