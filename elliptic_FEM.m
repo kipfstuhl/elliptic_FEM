@@ -45,7 +45,7 @@ switch method
   case 'spl1'
     spline1
   case 'spl2'
-    Spline2
+    spline2
   otherwise
     error(['Error!\nMethod %s not supported. Use Lag1, Lag2, spl1, ' ...
            'or spl2 instead'], method);

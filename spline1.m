@@ -1,6 +1,6 @@
 
 %% FEM with b-splines order 2
-% use of 2nd order splines for C1 regularity of the solution
+% use splines of degree 2 for C1 regularity
 
 % basis
 ref_spl = bspline([0 1 2]);
