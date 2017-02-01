@@ -149,4 +149,33 @@ end
 u = A \ rhovec';
 u = [0 u' 0];                           % get the boundary
                                         % conditions right
-                                        % a feature of Lagrange basis
+                                        % a feature of Lagrange
+                                        % basis
+
+
+%% Prepare output
+% construct the values needed for error integration
+% the integration is done using Boole's rule according to the
+% exercise sheet
+% this means the values at 0, 0.25, 0.5, 0.75 and 1.0 are needed
+
+% in this case the values of the basis function are easyly seen,
+% i.e. 4/4 3/4 2/4 1/4 0/4 for the points.
+u_000 = u(1:end-1);
+u_025 = 3.0/4.0*u(1:end-1) + 1.0/4.0*u(2:end);
+u_050 = 2.0/4.0*u(1:end-1) + 2.0/4.0*u(2:end);
+u_075 = 1.0/4.0*u(1:end-1) + 3.0/4.0*u(2:end);
+u_100 = u(2:end);
+
+% Differential for the H^1 error estimate
+% the differential is constant over the cell interiors, because the
+% basis functions are linear
+% the values have to be divided by the cell volumes to get the
+% right result
+Du = (u(2:end) - u(1:end-1))./C;
+
+Du_000 = Du;
+Du_025 = Du;
+Du_050 = Du;
+Du_075 = Du;
+Du_100 = Du;

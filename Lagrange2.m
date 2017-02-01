@@ -67,6 +67,12 @@ C(1:2:end)= x(2:end) - x(1:end-1);
 Cinv = zeros(1,N);                      % inverse of C
 Cinv(1:2:end) = 1./C(1:2:end);          % avoid division by 0
 
+% this "optimisation" improves the runtime by approximately
+% nothing, because most of the time (over 90%) is spent evaluating
+% the symbolic expressions.
+
+
+
 % nodes
 % first and last node is not needed. The value of the function at
 % this points is known due to boundary conditions.
@@ -280,3 +286,64 @@ end
 
 u = A\rhovec';
 u = [0 u' 0];                           % boundary conds
+
+
+%% Prepare Output
+% construct the values needed for error integration
+% the integration is done using Boole's rule according to the
+% exercise sheet
+% this means the values at 0, 0.25, 0.5, 0.75 and 1.0 are needed
+
+% exploit the fact, that the points 0.0, 0.5 and 1.0 are the
+% interpolation points for the Lagrange polynomials, this means
+% only exactly one basis function has value 1.0, the others have
+% value 0.0
+
+u_000 = u(1:2:end-2);
+
+pv0 = polyval(phi0, 0.25);
+pv1 = polyval(phi1, 0.25);
+pv2 = polyval(phi2, 0.25);
+u_025 = pv0*u(1:2:end-2) + pv1*u(2:2:end-1) + pv2*u(3:2:end);
+
+u_050 = pv0*u(2:2:end-1);
+
+pv0 = polyval(phi0, 0.75);
+pv1 = polyval(phi1, 0.75);
+pv2 = polyval(phi2, 0.75);
+u_075 = pv0*u(1:2:end-2) + pv1*u(2:2:end-1) + pv2*u(3:2:end);
+
+u_100 = u(3:2:end);
+
+
+% computations for the differentials
+% use that at 0.25, 0.5 and 0.75 one basis fct has zero derivative.
+% note that the values have to be divided by the cell volume.
+
+Dv0 = polyval(Dphi0, 0.00);
+Dv1 = polyval(Dphi1, 0.00);
+Dv2 = polyval(Dphi2, 0.00);
+Du_000 = 1./C(1:2:end).*(Dv0*u(1:2:end-2) + Dv1*u(2:2:end-1) + ...
+                         Dv2*u(3:2:end));
+
+Dv0 = polyval(Dphi0, 0.25);
+Dv1 = polyval(Dphi1, 0.25);
+Dv2 = polyval(Dphi2, 0.25);
+Du_025 = 1./C(1:2:end).*(Dv0*u(1:2:end-2) + Dv1*u(2:2:end-1));
+
+Dv0 = polyval(Dphi0, 0.50);
+Dv1 = polyval(Dphi1, 0.50);
+Dv2 = polyval(Dphi2, 0.50);
+Du_050 = 1./C(1:2:end).*(Dv0*u(1:2:end-2) + Dv2*u(3:2:end));
+
+Dv0 = polyval(Dphi0, 0.75);
+Dv1 = polyval(Dphi1, 0.75);
+Dv2 = polyval(Dphi2, 0.75);
+Du_075 = 1./C(1:2:end).*(Dv1*u(2:2:end-1) + Dv2*u(3:2:end));
+
+Dv0 = polyval(Dphi0, 1.00);
+Dv1 = polyval(Dphi1, 1.00);
+Dv2 = polyval(Dphi2, 1.00);
+Du_100 = 1./C(1:2:end).*(Dv0*u(1:2:end-2) + Dv1*u(2:2:end-1) + ...
+                         Dv2*u(3:2:end));
+
