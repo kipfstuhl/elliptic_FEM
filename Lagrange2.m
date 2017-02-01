@@ -83,141 +83,141 @@ nodes(2:2:end-1) = x(2:end-1);
 
 %% assembly of system matrix
 
-nnz = 1;                                % counter of non-zeros
+nz = 1;                                % counter of non-zeros
 
 % boundary conditions
 % use i as counter for convenience
 
 i=1;                                    % odd
-ivec(nnz) = i;
-jvec(nnz) = i;
-Mvec(nnz) = C(i)*M11;
-Svec(nnz) = Cinv(i)*S11;
-nnz = nnz + 1;
+ivec(nz) = i;
+jvec(nz) = i;
+Mvec(nz) = C(i)*M11;
+Svec(nz) = Cinv(i)*S11;
+nz = nz + 1;
 
-ivec(nnz) = i;
-jvec(nnz) = i+1;
-Mvec(nnz) = C(i)*M12;
-Svec(nnz) = Cinv(i)*S12;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i+1;
+Mvec(nz) = C(i)*M12;
+Svec(nz) = Cinv(i)*S12;
+nz = nz+1;
 
 i=2;                                    % even
-ivec(nnz) = i;
-jvec(nnz) = i-1;
-Mvec(nnz) = C(i-1)*M12;
-Svec(nnz) = Cinv(i-1)*S12;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i-1;
+Mvec(nz) = C(i-1)*M12;
+Svec(nz) = Cinv(i-1)*S12;
+nz = nz+1;
 
-ivec(nnz) = i;
-jvec(nnz) = i;
-Mvec(nnz) = C(i-1)*M22 + C(i+1)*M00;
-Svec(nnz) = Cinv(i-1)*S22 + Cinv(i+1)*S00;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i;
+Mvec(nz) = C(i-1)*M22 + C(i+1)*M00;
+Svec(nz) = Cinv(i-1)*S22 + Cinv(i+1)*S00;
+nz = nz+1;
 
-ivec(nnz) = i;
-jvec(nnz) = i+1;
-Mvec(nnz) = C(i+1)*M01;
-Svec(nnz) = Cinv(i+1)*S01;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i+1;
+Mvec(nz) = C(i+1)*M01;
+Svec(nz) = Cinv(i+1)*S01;
+nz = nz+1;
 
-ivec(nnz) = i;
-jvec(nnz) = i+2;
-Mvec(nnz) = C(i+1)*M02;
-Svec(nnz) = Cinv(i+1)*S02;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i+2;
+Mvec(nz) = C(i+1)*M02;
+Svec(nz) = Cinv(i+1)*S02;
+nz = nz+1;
 
 
 % even i
 for i=4:2:N-3                           % 3 and N-2 are odd
-    ivec(nnz) = i;
-    jvec(nnz) = i-2;
-    Mvec(nnz) = C(i-1)*M02;
-    Svec(nnz) = Cinv(i-1)*S02;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i-2;
+    Mvec(nz) = C(i-1)*M02;
+    Svec(nz) = Cinv(i-1)*S02;
+    nz = nz+1;
 
-    ivec(nnz) = i;
-    jvec(nnz) = i-1;
-    Mvec(nnz) = C(i-1)*M12;
-    Svec(nnz) = Cinv(i-1)*S12;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i-1;
+    Mvec(nz) = C(i-1)*M12;
+    Svec(nz) = Cinv(i-1)*S12;
+    nz = nz+1;
 
-    ivec(nnz) = i;
-    jvec(nnz) = i;
-    Mvec(nnz) = C(i-1)*M22 + C(i+1)*M00;
-    Svec(nnz) = Cinv(i-1)*S22 + Cinv(i+1)*S00;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i;
+    Mvec(nz) = C(i-1)*M22 + C(i+1)*M00;
+    Svec(nz) = Cinv(i-1)*S22 + Cinv(i+1)*S00;
+    nz = nz+1;
 
-    ivec(nnz) = i;
-    jvec(nnz) = i+1;
-    Mvec(nnz) = C(i+1)*M01;
-    Svec(nnz) = Cinv(i+1)*S01;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i+1;
+    Mvec(nz) = C(i+1)*M01;
+    Svec(nz) = Cinv(i+1)*S01;
+    nz = nz+1;
 
-    ivec(nnz) = i;
-    jvec(nnz) = i+2;
-    Mvec(nnz) = C(i+1)*M02;
-    Svec(nnz) = Cinv(i+1)*S02;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i+2;
+    Mvec(nz) = C(i+1)*M02;
+    Svec(nz) = Cinv(i+1)*S02;
+    nz = nz+1;
 end
 
 % odd i
 for i=3:2:N-2
-    ivec(nnz) = i;
-    jvec(nnz) = i-1;
-    Mvec(nnz) = C(i)*M01;
-    Svec(nnz) = Cinv(i)*S01;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i-1;
+    Mvec(nz) = C(i)*M01;
+    Svec(nz) = Cinv(i)*S01;
+    nz = nz+1;
 
-    ivec(nnz) = i;
-    jvec(nnz) = i;
-    Mvec(nnz) = C(i)*M11;
-    Svec(nnz) = Cinv(i)*S11;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i;
+    Mvec(nz) = C(i)*M11;
+    Svec(nz) = Cinv(i)*S11;
+    nz = nz+1;
 
-    ivec(nnz) = i;
-    jvec(nnz) = i+1;
-    Mvec(nnz) = C(i)*M12;
-    Svec(nnz) = Cinv(i)*S12;
-    nnz = nnz+1;
+    ivec(nz) = i;
+    jvec(nz) = i+1;
+    Mvec(nz) = C(i)*M12;
+    Svec(nz) = Cinv(i)*S12;
+    nz = nz+1;
 end
 
 i = N-1;                                % even i
-ivec(nnz) = i;
-jvec(nnz) = i-2;
-Mvec(nnz) = C(i-1)*M02;
-Svec(nnz) = Cinv(i-1)*S02;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i-2;
+Mvec(nz) = C(i-1)*M02;
+Svec(nz) = Cinv(i-1)*S02;
+nz = nz+1;
 
-ivec(nnz) = i;
-jvec(nnz) = i-1;
-Mvec(nnz) = C(i-1)*M12;
-Svec(nnz) = Cinv(i-1)*S12;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i-1;
+Mvec(nz) = C(i-1)*M12;
+Svec(nz) = Cinv(i-1)*S12;
+nz = nz+1;
 
-ivec(nnz) = i;
-jvec(nnz) = i;
-Mvec(nnz) = C(i-1)*M22 + C(i+1)*M00;
-Svec(nnz) = Cinv(i-1)*S22 + Cinv(i+1)*S00;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i;
+Mvec(nz) = C(i-1)*M22 + C(i+1)*M00;
+Svec(nz) = Cinv(i-1)*S22 + Cinv(i+1)*S00;
+nz = nz+1;
 
-ivec(nnz) = i;
-jvec(nnz) = i+1;
-Mvec(nnz) = C(i+1)*M01;
-Svec(nnz) = Cinv(i+1)*S01;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i+1;
+Mvec(nz) = C(i+1)*M01;
+Svec(nz) = Cinv(i+1)*S01;
+nz = nz+1;
 
 i = N;                                  % odd i
-ivec(nnz) = i;
-jvec(nnz) = i-1;
-Mvec(nnz) = C(i)*M01;
-Svec(nnz) = Cinv(i)*S01;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i-1;
+Mvec(nz) = C(i)*M01;
+Svec(nz) = Cinv(i)*S01;
+nz = nz+1;
 
-ivec(nnz) = i;
-jvec(nnz) = i;
-Mvec(nnz) = C(i)*M11;
-Svec(nnz) = Cinv(i)*S11;
-nnz = nnz+1;
+ivec(nz) = i;
+jvec(nz) = i;
+Mvec(nz) = C(i)*M11;
+Svec(nz) = Cinv(i)*S11;
+nz = nz+1;
 
 % remove unused variables
 clear Cinv
