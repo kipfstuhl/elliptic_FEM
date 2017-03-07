@@ -1,5 +1,5 @@
 
-clear all
+%clear all
 close all
 
 a = 0;                                  % left boundary
@@ -20,7 +20,10 @@ rho(z) = -diff(u_ex(z), 2) + u_ex(z)    % rhs
 
 
 % set solver properties
-method = 'Lag1'
+
+if ~exist('method')
+    method = 'Lag1'
+end
 rhs_calculation = 'basis'
 % rhs_calculation = 'basis'
 
@@ -32,7 +35,12 @@ grid_calculation = 'num'
 
 %syms z;
 %H(z) = sin(2*pi*z) + 1.2;
-[x, M] = calculate_grid(a, b, M, grid_calculation, '0.01');
+
+% for iteration and saving the errors
+if ~exist('gridSpace')
+    gridSpace = '0.1'
+end
+[x, M] = calculate_grid(a, b, M, grid_calculation, gridSpace);
 figure
 plot(x, zeros(size(x)), 'bx');
 xlim([a b])
