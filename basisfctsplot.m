@@ -1,7 +1,9 @@
 %% Plot basis functions for product spaces
 %  polynomial of deg N+1 in x firection and N in y direction
 
-N = 4;
+if ~exist('N')
+    N = 4;
+end
 
 [xnodes,~,~] = lglnodes(N);
 [ynodes,~] = lgwt(N, -1, 1);           % returns also the
@@ -34,12 +36,24 @@ for i=1:N+1
     end
 end
 
+% preparation for plotting the interpolation points
+xvals = repmat(xnodes, size(ynodes, 1), 1);
+yvals = repelem(ynodes, size(xnodes, 1));
+zvals = zeros(size(xvals));
+
+% speed up the plotting by updating just the necessary data
+plot3(xvals, yvals, zvals, 'r.', 'MarkerSize', 15);
+hold on
+h = surf(xx, yy, zz{1,1});
+xlabel('x');
+ylabel('y');
+xlim([-1 1]);
+ylim([-1 1]);
+hold off
 
 for i=1:N+1
     for j=1:N
-        surf(xx, yy, zz{i,j});
-        xlabel('x');
-        ylabel('y');
+        set(h, 'ZData', zz{i, j});
         waitforbuttonpress;
     end
 end
