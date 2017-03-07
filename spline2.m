@@ -1,3 +1,5 @@
+clear('ivec', 'jvec', 'Mvec', 'Svec')
+
 
 %% FEM with b-splines of order 3
 % use splines of degree 3 for C2 regularity
@@ -170,8 +172,8 @@ Cinv = 1./C;
 % this does not improve much, because most time is spent in the
 % evaluation of symbolic expressions.
 
-% node Vetor
-nodes = x(e:end-1);
+% node Vector
+nodes = x(2:end-1);
 
 
 %% assembly of the matrix
@@ -188,13 +190,13 @@ Svec(nz) = Cinv(i)*l_S00 + Cinv(i+1)*l_M22;
 nz = nz+1;
 
 ivec(nz) = i;
-ivec(nz) = i+1;
+jvec(nz) = i+1;
 Mvec(nz) = C(i)*l_M01 + C(i+1)*l_M02;
 Svec(nz) = Cinv(i)*l_S01 + Cinv(i+1)*l_S02;
 nz = nz+1;
 
 ivec(nz) = i;
-ivec(nz) = i+2;
+jvec(nz) = i+2;
 Mvec(nz) = C(i+1)*l_M12;
 Svec(nz) = Cinv(i+1)*l_S12;
 nz = nz+1;
@@ -316,8 +318,8 @@ nz = nz+1;
 
 ivec(nz) = i;
 jvec(nz) = i+2;
-Mvec(nz) = C(i+1)*r_M21;
-Svec(nz) = Cinv(i+1)*r_S21;
+Mvec(nz) = C(i+1)*r_M12;
+Svec(nz) = Cinv(i+1)*r_S12;
 nz = nz+1;
 
 i=N-1;
@@ -360,8 +362,8 @@ nz = nz+1;
 
 ivec(nz) = i;
 jvec(nz) = i;
-Mvec(nz) = C(i-1)*r_M11 + C(i)*r_M00 + C(i+1)*r_M22;
-Svec(nz) = Cinv(i-1)*r_S11 + Cinv(i)*r_S00 + Cinv(i+1)*r_S22;
+Mvec(nz) = C(i-1)*r_M11 + C(i)*r_M00;
+Svec(nz) = Cinv(i-1)*r_S11 + Cinv(i)*r_S00;
 nz = nz+1;
 
 
@@ -430,6 +432,7 @@ switch rhs_calculation
     end
 
     % right boundary
+    i = N;
     clear z igrand han int
     z = x(i-1) + xi*C(i-1);
     igrand(xi) = eval(rho)*poly2sym(right1, xi);
@@ -448,7 +451,11 @@ switch rhs_calculation
 
 
   case 'basis'
-    z = nodes;
+    %z = nodes;
+
+    %double check this
+    z = (x(1:end-1) + x(2:end))./2.0;
+    
     Mass = sparse(ivec, jvec, Mvec);
     rhovec = (Mass * eval(rho)')';
     
@@ -457,4 +464,4 @@ end
 
 %% solve system
 
-u = A\rhovec;
+u = A\rhovec';

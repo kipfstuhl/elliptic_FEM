@@ -1,5 +1,6 @@
 
 %clear all
+clear('i', 'j')
 close all
 
 a = 0;                                  % left boundary
@@ -25,7 +26,7 @@ if ~exist('method')
     method = 'Lag1'
 end
 rhs_calculation = 'basis'
-% rhs_calculation = 'basis'
+% rhs_calculation = 'exact'
 
 %% define the grid
 

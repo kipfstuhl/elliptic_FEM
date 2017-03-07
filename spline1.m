@@ -1,3 +1,5 @@
+clear('ivec', 'jvec', 'Mvec', 'Svec')
+
 
 %% FEM with b-splines order 2
 % use splines of degree 2 for C1 regularity

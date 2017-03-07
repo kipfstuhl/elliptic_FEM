@@ -1,3 +1,5 @@
+clear('ivec', 'jvec', 'Mvec', 'Svec')
+
 
 % Define basis functions
 
