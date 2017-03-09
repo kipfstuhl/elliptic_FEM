@@ -7,8 +7,8 @@ clear('ivec', 'jvec', 'Mvec', 'Svec')
 % basis
 ref_spl = bspline([0 1 2]);
 
-phi0 = ref_spl.coefs(1,:);
-phi1 = ref_spl.coefs(2,:);
+phi0 = ref_spl.coefs(2,:);
+phi1 = ref_spl.coefs(1,:);
 
 Dphi0 = polyder(phi0);
 Dphi1 = polyder(phi1);
@@ -147,3 +147,28 @@ end
 
 u = A\rhovec';
 u = [0 u' 0];
+
+%% prepare output
+
+u_000 = u(1:end-1);
+
+pv0 = polyval(phi0, 0.25);
+pv1 = polyval(phi1, 0.25);
+u_025 = pv1*u(1:end-1) + pv0*u(2:end);
+
+pv0 = polyval(phi0, 0.50);
+pv1 = polyval(phi1, 0.50);
+u_050 = pv1*u(1:end-1) + pv0*u(2:end);
+
+pv0 = polyval(phi0, 0.75);
+pv1 = polyval(phi1, 0.75);
+u_075 = pv1*u(1:end-1) + pv0*u(2:end);
+
+u_100 = u(2:end);
+
+Du = (u(2:end) - u(1:end-1))./C;
+Du_000 = Du;
+Du_025 = Du;
+Du_050 = Du;
+Du_075 = Du;
+Du_100 = Du;

@@ -20,8 +20,8 @@ ref_right = bspline([1 2 3 3]);
 % spl(x) = {   phi0(x)  x in [1,2]
 %           \  phi2(x)  x in [2,3]
 % 
-phi0 = ref_spl.coefs(1, :);
-phi1 = ref_spl.coefs(2, :);
+phi0 = ref_spl.coefs(2, :);
+phi1 = ref_spl.coefs(1, :);
 phi2 = ref_spl.coefs(3, :);
 
 left0 = ref_left.coefs(1, :);
@@ -465,3 +465,259 @@ end
 %% solve system
 
 u = A\rhovec';
+
+
+
+%% prepare output
+
+
+
+% boundary at the left
+i = 1;
+pv0 = polyval(left0, 0.00);
+pv1 = polyval(phi1, 0.00);
+u_000(i) = pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(left0, 0.25);
+pv1 = polyval(phi1, 0.25);
+u_025(i) =pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(left0, 0.50);
+pv1 = polyval(phi1, 0.50);
+u_050(i) =pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(left0, 0.75);
+pv1 = polyval(phi1, 0.75);
+u_075(i) = pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(left0, 1.00);
+pv1 = polyval(phi1, 1.00);
+u_100(i) = pv0*u(i) + pv1*u(i+1);
+
+%Derivative
+pv0 = polyval(Dl0, 0.00);
+pv1 = polyval(Dphi1, 0.00);
+Du_000(i) = 1/C(i)*(pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dl0, 0.25);
+pv1 = polyval(Dphi1, 0.25);
+Du_025(i) = 1/C(i)*(pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dl0, 0.50);
+pv1 = polyval(Dphi1, 0.50);
+Du_050(i) = 1/C(i)*(pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dl0, 0.75);
+pv1 = polyval(Dphi1, 0.75);
+Du_075(i) = 1/C(i)*(pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dl0, 1.00);
+pv1 = polyval(Dphi1, 1.00);
+Du_100(i) = 1/C(i)*(pv0*u(i) + pv1*u(i+1));
+
+
+i=2;
+pv0 = polyval(phi0, 0.00);
+pv1 = polyval(phi1, 0.00);
+pv2 = polyval(left2, 0.00);
+u_000(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 0.25);
+pv1 = polyval(phi1, 0.25);
+pv2 = polyval(left2, 0.25);
+u_025(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 0.50);
+pv1 = polyval(phi1, 0.50);
+pv2 = polyval(left2, 0.50);
+u_050(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 0.75);
+pv1 = polyval(phi1, 0.75);
+pv2 = polyval(left2, 0.75);
+u_075(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 1.00);
+pv1 = polyval(phi1, 1.00);
+pv2 = polyval(left2, 1.00);
+u_100(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+%Differentials
+pv0 = polyval(Dphi0, 0.00);
+pv1 = polyval(Dphi1, 0.00);
+pv2 = polyval(Dl2, 0.00);
+Du_000(i) =1/C(i)*( pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 0.25);
+pv1 = polyval(Dphi1, 0.25);
+pv2 = polyval(Dl2, 0.25);
+Du_025(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 0.50);
+pv1 = polyval(Dphi1, 0.50);
+pv2 = polyval(Dl2, 0.50);
+Du_050(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 0.75);
+pv1 = polyval(Dphi1, 0.75);
+pv2 = polyval(Dl2, 0.75);
+Du_075(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 1.00);
+pv1 = polyval(Dphi1, 1.00);
+pv2 = polyval(Dl2, 1.00);
+Du_100(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+
+% no boundary
+for i=3:N-2
+    pv0 = polyval(phi0, 0.00);
+    pv1 = polyval(phi1, 0.00);
+    pv2 = polyval(phi2, 0.00);
+    u_000(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+    
+    pv0 = polyval(phi0, 0.25);
+    pv1 = polyval(phi1, 0.25);
+    pv2 = polyval(phi2, 0.25);
+    u_025(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+    pv0 = polyval(phi0, 0.50);
+    pv1 = polyval(phi1, 0.50);
+    pv2 = polyval(phi2, 0.50);
+    u_050(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+    pv0 = polyval(phi0, 0.75);
+    pv1 = polyval(phi1, 0.75);
+    pv2 = polyval(phi2, 0.75);
+    u_075(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+    pv0 = polyval(phi0, 1.00);
+    pv1 = polyval(phi1, 1.00);
+    pv2 = polyval(phi2, 1.00);
+    u_100(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+    %Differentials
+    pv0 = polyval(Dphi0, 0.00);
+    pv1 = polyval(Dphi1, 0.00);
+    pv2 = polyval(Dphi2, 0.00);
+    Du_000(i) =1/C(i)*( pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+    
+    pv0 = polyval(Dphi0, 0.25);
+    pv1 = polyval(Dphi1, 0.25);
+    pv2 = polyval(Dphi2, 0.25);
+    Du_025(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+    pv0 = polyval(Dphi0, 0.50);
+    pv1 = polyval(Dphi1, 0.50);
+    pv2 = polyval(Dphi2, 0.50);
+    Du_050(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+    pv0 = polyval(Dphi0, 0.75);
+    pv1 = polyval(Dphi1, 0.75);
+    pv2 = polyval(Dphi2, 0.75);
+    Du_075(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+    pv0 = polyval(Dphi0, 1.00);
+    pv1 = polyval(Dphi1, 1.00);
+    pv2 = polyval(Dphi2, 1.00);
+    Du_100(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+end
+
+i=N-2;
+pv0 = polyval(phi0, 0.00);
+pv1 = polyval(right1, 0.00);
+pv2 = polyval(phi2, 0.00);
+u_000(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 0.25);
+pv1 = polyval(right1, 0.25);
+pv2 = polyval(phi2, 0.25);
+u_025(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 0.50);
+pv1 = polyval(right1, 0.50);
+pv2 = polyval(phi2, 0.50);
+u_050(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 0.75);
+pv1 = polyval(right1, 0.75);
+pv2 = polyval(phi2, 0.75);
+u_075(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+pv0 = polyval(phi0, 1.00);
+pv1 = polyval(right1, 1.00);
+pv2 = polyval(phi2, 1.00);
+u_100(i) = pv2*u(i-1) + pv0*u(i) + pv1*u(i+1);
+
+%Differentials
+pv0 = polyval(Dphi0, 0.00);
+pv1 = polyval(Dr1, 0.00);
+pv2 = polyval(Dphi2, 0.00);
+Du_000(i) =1/C(i)*( pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 0.25);
+pv1 = polyval(Dr1, 0.25);
+pv2 = polyval(Dphi2, 0.25);
+Du_025(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 0.50);
+pv1 = polyval(Dr1, 0.50);
+pv2 = polyval(Dphi2, 0.50);
+Du_050(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 0.75);
+pv1 = polyval(Dr1, 0.75);
+pv2 = polyval(Dphi2, 0.75);
+Du_075(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+pv0 = polyval(Dphi0, 1.00);
+pv1 = polyval(Dr1, 1.00);
+pv2 = polyval(Dphi2, 1.00);
+Du_100(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i) + pv1*u(i+1));
+
+i = N;
+pv0 = polyval(right0, 0.00);
+pv2 = polyval(phi2, 0.00);
+u_000(i) = pv2*u(i-1) + pv0*u(i);
+
+pv0 = polyval(right0, 0.25);
+pv2 = polyval(phi2, 0.25);
+u_025(i) = pv2*u(i-1) + pv0*u(i);
+
+pv0 = polyval(right0, 0.50);
+pv2 = polyval(phi2, 0.50);
+u_050(i) = pv2*u(i-1) + pv0*u(i);
+
+pv0 = polyval(right0, 0.75);
+pv2 = polyval(phi2, 0.75);
+u_075(i) = pv2*u(i-1) + pv0*u(i);
+
+pv0 = polyval(right0, 1.00);
+pv2 = polyval(phi2, 1.00);
+u_100(i) = pv2*u(i-1) + pv0*u(i);
+
+%Differentials
+pv0 = polyval(Dr0, 0.00);
+pv2 = polyval(Dphi2, 0.00);
+Du_000(i) =1/C(i)*( pv2*u(i-1) + pv0*u(i));
+
+pv0 = polyval(Dr0, 0.25);
+pv2 = polyval(Dphi2, 0.25);
+Du_025(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i));
+
+pv0 = polyval(Dr0, 0.50);
+pv2 = polyval(Dphi2, 0.50);
+Du_050(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i));
+
+pv0 = polyval(Dr0, 0.75);
+pv2 = polyval(Dphi2, 0.75);
+Du_075(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i));
+
+pv0 = polyval(Dr0, 1.00);
+pv2 = polyval(Dphi2, 1.00);
+Du_100(i) = 1/C(i)*(pv2*u(i-1) + pv0*u(i));
+
+
+
+

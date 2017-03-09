@@ -15,7 +15,7 @@ L = b - a;                              % length of interval
 % copied from reference
 syms z;
 u_ex(z) = -sin(2*pi/L*z)*exp(z);        % exact solution
-u_ex(z) = (z-a)*(z-b)*(z-(a+b)/2)^4;
+%u_ex(z) = (z-a)*(z-b)*(z-(a+b)/2)^4;
 Du_ex(z) = diff(u_ex(z), 1);            % differential
 rho(z) = -diff(u_ex(z), 2) + u_ex(z)    % rhs
 
@@ -25,8 +25,9 @@ rho(z) = -diff(u_ex(z), 2) + u_ex(z)    % rhs
 if ~exist('method')
     method = 'Lag1'
 end
+
 rhs_calculation = 'basis'
-% rhs_calculation = 'exact'
+%rhs_calculation = 'exact'
 
 %% define the grid
 

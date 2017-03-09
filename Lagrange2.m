@@ -308,7 +308,7 @@ pv1 = polyval(phi1, 0.25);
 pv2 = polyval(phi2, 0.25);
 u_025 = pv0*u(1:2:end-2) + pv1*u(2:2:end-1) + pv2*u(3:2:end);
 
-u_050 = pv0*u(2:2:end-1);
+u_050 = u(2:2:end-1);
 
 pv0 = polyval(phi0, 0.75);
 pv1 = polyval(phi1, 0.75);
